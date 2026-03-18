@@ -1,0 +1,53 @@
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { AppModule } from './app.module';
+import cookieParser from 'cookie-parser';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:3000')
+    .split(',')
+    .map((o) => o.trim());
+  app.enableCors({
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Telegram-Init-Data'],
+  });
+
+  app.use(cookieParser());
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+  const config = new DocumentBuilder()
+    .setTitle('AgentBook API')
+    .setDescription('API for AgentBook — AI Agent Directory on TON/Telegram')
+    .setVersion('1.0')
+    .addTag('agents', 'Agent registration and directory')
+    .addTag('reputation', 'Agent ratings and leaderboard')
+    .addTag('chat', 'Chat logging')
+    .addTag('owner', 'Owner agent management')
+    .addTag('payment', 'Payment lifecycle')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'AgentBook API Docs',
+    customCss: '.swagger-ui .topbar { display: none }',
+  });
+
+  const port = process.env.PORT ?? 3001;
+  await app.listen(port, '0.0.0.0');
+  console.log(`AgentBook API running on http://localhost:${port}`);
+  console.log(`Swagger docs at http://localhost:${port}/api`);
+}
+bootstrap();
