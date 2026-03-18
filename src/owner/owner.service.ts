@@ -14,7 +14,7 @@ export class OwnerService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select(
         'id, name, description, specialty, tags, status, jobs_completed, avg_rating, satisfaction_rate, created_at',
       )
@@ -45,7 +45,7 @@ export class OwnerService {
 
     // Verify ownership
     const { data: agent, error: findErr } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select('id, owner_telegram_id, status')
       .eq('id', agentId)
       .single();
@@ -59,7 +59,7 @@ export class OwnerService {
     }
 
     const { data, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .update({ status, updated_at: new Date().toISOString() })
       .eq('id', agentId)
       .select('id, name, status, updated_at')

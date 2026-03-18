@@ -1,4 +1,4 @@
-CREATE TABLE agents (
+CREATE TABLE ab_agents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     description TEXT,
@@ -19,9 +19,9 @@ CREATE TABLE agents (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE ratings (
+CREATE TABLE ab_ratings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    agent_id UUID REFERENCES agents(id),
+    agent_id UUID REFERENCES ab_agents(id),
     rater_telegram_id BIGINT NOT NULL,
     stars INT NOT NULL CHECK (stars BETWEEN 1 AND 5),
     category TEXT,
@@ -29,9 +29,9 @@ CREATE TABLE ratings (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE chat_logs (
+CREATE TABLE ab_chat_logs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    agent_id UUID REFERENCES agents(id),
+    agent_id UUID REFERENCES ab_agents(id),
     participant_id TEXT NOT NULL,
     participant_type TEXT NOT NULL,
     message TEXT NOT NULL,
@@ -39,9 +39,9 @@ CREATE TABLE chat_logs (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE payments (
+CREATE TABLE ab_payments (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    agent_id UUID REFERENCES agents(id),
+    agent_id UUID REFERENCES ab_agents(id),
     payer_telegram_id BIGINT NOT NULL,
     amount_nanoton BIGINT NOT NULL,
     status TEXT DEFAULT 'pending',

@@ -16,7 +16,7 @@ export class PaymentService {
 
     // Verify agent exists
     const { data: agent, error: agentErr } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select('id, status')
       .eq('id', dto.agentId)
       .single();
@@ -30,7 +30,7 @@ export class PaymentService {
     }
 
     const { data: payment, error } = await supabase
-      .from('payments')
+      .from('ab_payments')
       .insert({
         agent_id: dto.agentId,
         payer_telegram_id: payerTelegramId,
@@ -51,7 +51,7 @@ export class PaymentService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data: payment, error: findErr } = await supabase
-      .from('payments')
+      .from('ab_payments')
       .select('*')
       .eq('id', dto.paymentId)
       .single();
@@ -67,7 +67,7 @@ export class PaymentService {
     }
 
     const { data, error } = await supabase
-      .from('payments')
+      .from('ab_payments')
       .update({
         status: 'confirmed',
         tx_hash: dto.txHash,

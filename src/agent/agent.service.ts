@@ -20,7 +20,7 @@ export class AgentService {
     const keyHash = createHash('sha256').update(rawKey).digest('hex');
 
     const { data, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .insert({
         name: dto.name,
         description: dto.description || null,
@@ -60,7 +60,7 @@ export class AgentService {
     const offset = (page - 1) * limit;
 
     let qb = supabase
-      .from('agents')
+      .from('ab_agents')
       .select(
         'id, name, description, specialty, tags, ton_wallet, telegram_bot_id, rate, status, jobs_completed, avg_rating, satisfaction_rate, created_at',
         { count: 'exact' },
@@ -111,7 +111,7 @@ export class AgentService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select(
         'id, name, description, specialty, tags, ton_wallet, telegram_bot_id, rate, status, jobs_completed, avg_rating, satisfaction_rate, created_at, updated_at',
       )
@@ -139,7 +139,7 @@ export class AgentService {
     if (dto.rate !== undefined) updateData.rate = dto.rate;
 
     const { data, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .update(updateData)
       .eq('id', id)
       .select(

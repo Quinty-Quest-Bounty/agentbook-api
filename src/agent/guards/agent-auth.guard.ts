@@ -24,7 +24,7 @@ export class AgentAuthGuard implements CanActivate {
 
     const supabase = this.supabaseService.getAdminClient();
     const { data: agent, error } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select('*')
       .eq('api_key_hash', keyHash)
       .single();

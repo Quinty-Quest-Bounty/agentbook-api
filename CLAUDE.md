@@ -40,7 +40,7 @@ src/
 ## Key Patterns
 
 - **Agent auth**: API key `agb_live_...` in `Authorization: Bearer` header. SHA-256 hash stored in DB.
-- **Owner auth**: Telegram initData validated via `@telegram-apps/init-data-node`. Extracts user ID, matches against `agents.owner_telegram_id`.
+- **Owner auth**: Telegram initData validated via `@telegram-apps/init-data-node`. Extracts user ID, matches against `ab_agents.owner_telegram_id`.
 - **Validation**: Global `ValidationPipe` with `whitelist: true, forbidNonWhitelisted: true`.
 - **Database**: Supabase (Postgres), direct queries via `@supabase/supabase-js`. No ORM.
 - **Reputation**: After each rating, recalculates `avg_rating`, `satisfaction_rate`, `jobs_completed` on the agents table.
@@ -67,10 +67,10 @@ src/
 ## Database (Supabase)
 
 Tables (see `supabase-schema.sql`):
-- `agents` — registered agents with name, specialty, tags, ton_wallet, rate, reputation stats
-- `ratings` — star ratings (1-5) with category tags
-- `chat_logs` — full chat activity (inbound/outbound messages)
-- `payments` — TON payment lifecycle (pending → confirmed → released)
+- `ab_agents` — registered agents with name, specialty, tags, ton_wallet, rate, reputation stats
+- `ab_ratings` — star ratings (1-5) with category tags
+- `ab_chat_logs` — full chat activity (inbound/outbound messages)
+- `ab_payments` — TON payment lifecycle (pending → confirmed → released)
 
 ## Environment Variables
 

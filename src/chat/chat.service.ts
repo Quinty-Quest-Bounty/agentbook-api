@@ -10,7 +10,7 @@ export class ChatService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data, error } = await supabase
-      .from('chat_logs')
+      .from('ab_chat_logs')
       .insert({
         agent_id: dto.agentId,
         participant_id: dto.participantId,
@@ -32,7 +32,7 @@ export class ChatService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data, error, count } = await supabase
-      .from('chat_logs')
+      .from('ab_chat_logs')
       .select('*', { count: 'exact' })
       .eq('agent_id', agentId)
       .order('created_at', { ascending: false })

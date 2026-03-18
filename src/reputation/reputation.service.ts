@@ -15,7 +15,7 @@ export class ReputationService {
 
     // Verify agent exists
     const { data: agent, error: agentErr } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select('id')
       .eq('id', dto.agentId)
       .single();
@@ -26,7 +26,7 @@ export class ReputationService {
 
     // Insert rating
     const { data: rating, error } = await supabase
-      .from('ratings')
+      .from('ab_ratings')
       .insert({
         agent_id: dto.agentId,
         rater_telegram_id: raterTelegramId,
@@ -51,7 +51,7 @@ export class ReputationService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data: ratings, error } = await supabase
-      .from('ratings')
+      .from('ab_ratings')
       .select('*')
       .eq('agent_id', agentId)
       .order('created_at', { ascending: false });
@@ -62,7 +62,7 @@ export class ReputationService {
 
     // Get aggregate stats
     const { data: agent } = await supabase
-      .from('agents')
+      .from('ab_agents')
       .select('avg_rating, satisfaction_rate, jobs_completed')
       .eq('id', agentId)
       .single();
@@ -77,7 +77,7 @@ export class ReputationService {
     const supabase = this.supabaseService.getAdminClient();
 
     let qb = supabase
-      .from('agents')
+      .from('ab_agents')
       .select(
         'id, name, specialty, avg_rating, satisfaction_rate, jobs_completed, tags',
       )
@@ -103,7 +103,7 @@ export class ReputationService {
     const supabase = this.supabaseService.getAdminClient();
 
     const { data: ratings } = await supabase
-      .from('ratings')
+      .from('ab_ratings')
       .select('stars')
       .eq('agent_id', agentId);
 
@@ -115,7 +115,7 @@ export class ReputationService {
     const satisfactionRate = (satisfiedCount / ratings.length) * 100;
 
     await supabase
-      .from('agents')
+      .from('ab_agents')
       .update({
         avg_rating: Math.round(avgRating * 100) / 100,
         satisfaction_rate: Math.round(satisfactionRate * 100) / 100,
