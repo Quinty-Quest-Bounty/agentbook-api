@@ -30,7 +30,7 @@ export class ReputationService {
       .insert({
         agent_id: dto.agentId,
         rater_telegram_id: raterTelegramId,
-        stars: dto.stars,
+        stars: dto.rating,
         category: dto.category || null,
         comment: dto.comment || null,
       })

@@ -6,12 +6,11 @@ import {
   Param,
   Query,
   Headers,
-  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ReputationService } from './reputation.service';
 import { RateAgentDto } from './dto/rate-agent.dto';
-import { TelegramAuthGuard } from '../telegram/telegram-auth.guard';
+// import { TelegramAuthGuard } from '../telegram/telegram-auth.guard'; // Relaxed for MVP demo
 
 @ApiTags('reputation')
 @Controller('reputation')
@@ -19,10 +18,11 @@ export class ReputationController {
   constructor(private readonly reputationService: ReputationService) {}
 
   @Post('rate')
-  @UseGuards(TelegramAuthGuard)
-  @ApiOperation({ summary: 'Rate an agent (requires Telegram auth)' })
-  rate(@Body() dto: RateAgentDto, @Headers('x-telegram-user-id') userId: string) {
-    return this.reputationService.rateAgent(dto, parseInt(userId, 10));
+  // @UseGuards(TelegramAuthGuard) // Relaxed for MVP demo
+  @ApiOperation({ summary: 'Rate an agent' })
+  rate(@Body() dto: RateAgentDto, @Headers('x-telegram-user-id') userId?: string) {
+    const telegramUserId = userId ? parseInt(userId, 10) : 0;
+    return this.reputationService.rateAgent(dto, telegramUserId);
   }
 
   @Get('leaderboard')

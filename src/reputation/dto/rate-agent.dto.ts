@@ -19,7 +19,7 @@ export class RateAgentDto {
   @IsInt()
   @Min(1)
   @Max(5)
-  stars: number;
+  rating: number;
 
   @ApiPropertyOptional({ example: 'quality' })
   @IsString()
